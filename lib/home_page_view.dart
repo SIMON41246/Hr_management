@@ -7,7 +7,7 @@ class HomePage extends StatelessWidget {
       'prenom': 'John',
       'email': 'john.doe@example.com',
       'telephone': '123-456-7890',
-      'Cin': 'F784524',
+      'cin': 'F784524',
       'ville': 'Paris',
       'poste': 'Développeur'
     },
@@ -16,7 +16,7 @@ class HomePage extends StatelessWidget {
       'prenom': 'Jane',
       'email': 'jane.smith@example.com',
       'telephone': '098-765-4321',
-      'Cin': 'F784524',
+      'cin': 'F784524',
       'ville': 'Lyon',
       'poste': 'Designer'
     },
@@ -51,6 +51,13 @@ class HomePage extends StatelessWidget {
     );
   }
 
+  void _navigateToHome(BuildContext context) {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => HomePage()),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,9 +71,7 @@ class HomePage extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.home, color: Colors.white),
             onPressed: () {
-              // Naviguer vers la page d'accueil
-              Navigator.pushReplacement(
-                  context, MaterialPageRoute(builder: (context) => HomePage()));
+              _navigateToHome(context);
             },
           ),
           IconButton(
@@ -74,7 +79,7 @@ class HomePage extends StatelessWidget {
             onPressed: () {
               showSearch(
                 context: context,
-                delegate: EmployeeSearchDelegate(employees),
+                delegate: EmployeeSearchDelegate(employees, _showDeleteConfirmation),
               );
             },
           ),
@@ -92,7 +97,7 @@ class HomePage extends StatelessWidget {
               accountEmail: Text('user.email@example.com', style: TextStyle(color: Colors.white)),
               currentAccountPicture: CircleAvatar(
                 radius: 40.0,
-                 // Remplacez par l'image de l'utilisateur
+                // Remplacez par l'image de l'utilisateur
               ),
             ),
             ListTile(
@@ -116,45 +121,58 @@ class HomePage extends StatelessWidget {
               borderRadius: BorderRadius.circular(15.0),
             ),
             elevation: 4,
-            child: ListTile(
-              title: Text('${employee['nom']} ${employee['prenom']}'),
-              subtitle: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Email: ${employee['email']}'),
-                  Text('Téléphone: ${employee['telephone']}'),
-                  Text('Ville: ${employee['ville']}'),
-                  Text('Poste: ${employee['poste']}'),
-                ],
-              ),
-              trailing: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  IconButton(
-                    icon: Icon(Icons.edit, color: Colors.blue),
-                    onPressed: () {
-                      // Action de modification
-                      Navigator.pushNamed(context, '/edit-employee');
-                    },
+            child: Column(
+              children: [
+                ListTile(
+                  title: Center(
+                    child: CircleAvatar(
+                      radius: 30.0,
+                      backgroundColor: Colors.grey.shade200,
+                      child: Icon(Icons.person, color: Colors.grey.shade700),
+                    ),
                   ),
-                  IconButton(
-                    icon: Icon(Icons.event_busy, color: Colors.blue),
-                    onPressed: () {
-                      // Action de modification
-                      Navigator.pushNamed(context, '/conge-employee');
-                    },
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: 10.0),
+                      Text('${employee['nom']} ${employee['prenom']}',
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                      Text('Email: ${employee['email']}'),
+                      Text('Téléphone: ${employee['telephone']}'),
+                      Text('Ville: ${employee['ville']}'),
+                      Text('Poste: ${employee['poste']}'),
+                    ],
                   ),
-                  IconButton(
-                    icon: Icon(Icons.delete, color: Colors.red),
-                    onPressed: () {
-                      _showDeleteConfirmation(context, index);
-                    },
-                  ),
-                ],
-              ),
-              onTap: () {
-                // Action lorsque l'on clique sur un employé
-              },
+                  onTap: () {
+                    // Action lorsque l'on clique sur un employé
+                  },
+                ),
+                ButtonBar(
+                  alignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    IconButton(
+                      icon: Icon(Icons.edit, color: Colors.blue),
+                      onPressed: () {
+                        // Action de modification
+                        Navigator.pushNamed(context, '/edit-employee');
+                      },
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.event_busy, color: Colors.blue),
+                      onPressed: () {
+                        // Action de modification
+                        Navigator.pushNamed(context, '/conge-employee');
+                      },
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.delete, color: Colors.red),
+                      onPressed: () {
+                        _showDeleteConfirmation(context, index);
+                      },
+                    ),
+                  ],
+                ),
+              ],
             ),
           );
         },
@@ -162,7 +180,7 @@ class HomePage extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           // Naviguer vers la page d'ajout d'employé
-         Navigator.pushNamed(context, '/add-employee');
+          Navigator.pushNamed(context, '/add-employee');
         },
         backgroundColor: Color.fromARGB(255, 174, 17, 6),
         child: Icon(Icons.person_add_alt_1, color: Colors.white),
@@ -174,8 +192,9 @@ class HomePage extends StatelessWidget {
 // Effectuer une recherche des employés
 class EmployeeSearchDelegate extends SearchDelegate {
   final List<Map<String, String>> employees;
+  final Function(BuildContext, int) onDelete;
 
-  EmployeeSearchDelegate(this.employees);
+  EmployeeSearchDelegate(this.employees, this.onDelete);
 
   @override
   List<Widget> buildActions(BuildContext context) {
@@ -210,20 +229,67 @@ class EmployeeSearchDelegate extends SearchDelegate {
       itemCount: results.length,
       itemBuilder: (context, index) {
         final employee = results[index];
-        return ListTile(
-          title: Text('${employee['nom']} ${employee['prenom']}'),
-          subtitle: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+        return Card(
+          margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15.0),
+          ),
+          elevation: 4,
+          child: Column(
             children: [
-              Text('Email: ${employee['email']}'),
-              Text('Téléphone: ${employee['telephone']}'),
-              Text('Ville: ${employee['ville']}'),
-              Text('Poste: ${employee['poste']}'),
+              ListTile(
+                title: Center(
+                  child: CircleAvatar(
+                    radius: 30.0,
+                    backgroundColor: Colors.grey.shade200,
+                    child: Icon(Icons.person, color: Colors.grey.shade700),
+                  ),
+                ),
+                subtitle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: 10.0),
+                    Text('${employee['nom']} ${employee['prenom']}',
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    Text('CIN: ${employee['cin']}'),
+                    Text('Email: ${employee['email']}'),
+                    Text('Téléphone: ${employee['telephone']}'),
+                    Text('Ville: ${employee['ville']}'),
+                    Text('Poste: ${employee['poste']}'),
+                  ],
+                ),
+                onTap: () {
+                  query = '${employee['nom']} ${employee['prenom']}';
+                  showResults(context);
+                },
+              ),
+              ButtonBar(
+                alignment: MainAxisAlignment.spaceAround,
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.edit, color: Colors.blue),
+                    onPressed: () {
+                      // Action de modification
+                      Navigator.pushNamed(context, '/edit-employee');
+                    },
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.event_busy, color: Colors.blue),
+                    onPressed: () {
+                      // Action de modification
+                      Navigator.pushNamed(context, '/conge-employee');
+                    },
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.delete, color: Colors.red),
+                    onPressed: () {
+                      onDelete(context, index);
+                    },
+                  ),
+                ],
+              ),
             ],
           ),
-          onTap: () {
-            // Action lorsque l'on clique sur un employé
-          },
         );
       },
     );
@@ -245,6 +311,7 @@ class EmployeeSearchDelegate extends SearchDelegate {
           subtitle: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Text('CIN: ${employee['cin']}'),
               Text('Email: ${employee['email']}'),
               Text('Téléphone: ${employee['telephone']}'),
               Text('Ville: ${employee['ville']}'),
@@ -252,7 +319,8 @@ class EmployeeSearchDelegate extends SearchDelegate {
             ],
           ),
           onTap: () {
-            // Action lorsque l'on clique sur un employé
+            query = '${employee['nom']} ${employee['prenom']}';
+            showResults(context);
           },
         );
       },

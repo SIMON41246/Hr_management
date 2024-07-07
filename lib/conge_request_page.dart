@@ -21,7 +21,7 @@ class _CongeRequestPageState extends State<CongeRequestPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Formulaire de demande de congé"),
+        title: Text("demande de congé"),
       ),
       body: SingleChildScrollView(
         child: Padding(
