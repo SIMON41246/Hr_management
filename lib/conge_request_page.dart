@@ -21,44 +21,66 @@ class _CongeRequestPageState extends State<CongeRequestPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("demande de congé"),
+        title: const Text("Demande de congé",
+        style: TextStyle(color: Colors.white),),
+        backgroundColor: const Color.fromARGB(255, 174, 17, 6),
       ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
-              _buildTextField(_nameController, "Nom et Prénom", Icons.person),
-              _buildDateField(_requestDateController, "Date de la demande", Icons.calendar_today),
-              _buildDateField(_startDateController, "Début de congé", Icons.calendar_today),
-              _buildDateField(_endDateController, "Fin de congé", Icons.calendar_today),
-              SizedBox(height: 10),
-              _buildLeaveTypeRadioButtons(),
-              SizedBox(height: 10),
-              _buildTextField(_reasonController, "Motif de la demande", Icons.edit),
-              SizedBox(height: 10),
-              _buildCompensationRadioButtons(),
-              SizedBox(height: 10),
-              _buildTextField(_commentController, "Commentaire", Icons.comment),
-              SizedBox(height: 20),
+              _buildCard(
+                title: "Nom et Prénom",
+                child: _buildTextField(_nameController, "Nom et Prénom", Icons.person),
+              ),
+              _buildCard(
+                title: "Date de la demande",
+                child: _buildDateField(_requestDateController, "Date de la demande", Icons.calendar_today),
+              ),
+              _buildCard(
+                title: "Début de congé",
+                child: _buildDateField(_startDateController, "Début de congé", Icons.calendar_today),
+              ),
+              _buildCard(
+                title: "Fin de congé",
+                child: _buildDateField(_endDateController, "Fin de congé", Icons.calendar_today),
+              ),
+              _buildCard(
+                title: "Type de congé demandé",
+                child: _buildLeaveTypeRadioButtons(),
+              ),
+              _buildCard(
+                title: "Motif de la demande",
+                child: _buildTextField(_reasonController, "Motif de la demande", Icons.edit),
+              ),
+              _buildCard(
+                title: "Rémunération",
+                child: _buildCompensationRadioButtons(),
+              ),
+              _buildCard(
+                title: "Commentaire",
+                child: _buildTextField(_commentController, "Commentaire", Icons.comment),
+              ),
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
                   // Submit action
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Color.fromARGB(255, 174, 17, 6),
+                  backgroundColor: const Color.fromARGB(255, 174, 17, 6),
                   foregroundColor: Colors.white,
-                  padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                  padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
                   ),
                 ),
-                child: Text(
+                child: const Text(
                   "Enregistrer",
                   style: TextStyle(color: Colors.white),
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               ElevatedButton(
                 onPressed: () {
                   Navigator.pop(context);
@@ -66,13 +88,13 @@ class _CongeRequestPageState extends State<CongeRequestPage> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.grey,
                   foregroundColor: Colors.white,
-                  padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                  padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
                   ),
                 ),
-                child: Text(
-                  "Back",
+                child: const Text(
+                  "Retour",
                   style: TextStyle(color: Colors.white),
                 ),
               ),
@@ -83,18 +105,47 @@ class _CongeRequestPageState extends State<CongeRequestPage> {
     );
   }
 
-  Widget _buildTextField(TextEditingController controller, String hintText, IconData icon) {
-    return TextField(
-      controller: controller,
-      decoration: InputDecoration(
-        hintText: hintText,
-        prefixIcon: Icon(icon),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
-        filled: true,
-        fillColor: Colors.white,
+  Widget _buildCard({required String title, required Widget child}) {
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15),
       ),
+      elevation: 5,
+      margin: const EdgeInsets.only(bottom: 20),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              title,
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            child,
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTextField(TextEditingController controller, String hintText, IconData icon) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        TextField(
+          controller: controller,
+          decoration: InputDecoration(
+            hintText: hintText,
+            prefixIcon: Icon(icon),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            filled: true,
+            fillColor: Colors.white,
+          ),
+        ),
+      ],
     );
   }
 
@@ -130,49 +181,36 @@ class _CongeRequestPageState extends State<CongeRequestPage> {
   Widget _buildLeaveTypeRadioButtons() {
     return Column(
       children: [
-        Text("Type de congé demandé"),
-        Row(
-          children: [
-            _buildRadioButton("Congé payé", _leaveType, (value) {
-              setState(() {
-                _leaveType = value!;
-              });
-            }),
-            _buildRadioButton("Congé maladie", _leaveType, (value) {
-              setState(() {
-                _leaveType = value!;
-              });
-            }),
-          ],
-        ),
-        Row(
-          children: [
-            _buildRadioButton("Congé parental", _leaveType, (value) {
-              setState(() {
-                _leaveType = value!;
-              });
-            }),
-            _buildRadioButton("Congé sans solde", _leaveType, (value) {
-              setState(() {
-                _leaveType = value!;
-              });
-            }),
-          ],
-        ),
-        Row(
-          children: [
-            _buildRadioButton("Congé sabbatique", _leaveType, (value) {
-              setState(() {
-                _leaveType = value!;
-              });
-            }),
-            _buildRadioButton("Autre", _leaveType, (value) {
-              setState(() {
-                _leaveType = value!;
-              });
-            }),
-          ],
-        ),
+        _buildRadioButton("Congé payé", _leaveType, (value) {
+          setState(() {
+            _leaveType = value!;
+          });
+        }),
+        _buildRadioButton("Congé maladie", _leaveType, (value) {
+          setState(() {
+            _leaveType = value!;
+          });
+        }),
+        _buildRadioButton("Congé parental", _leaveType, (value) {
+          setState(() {
+            _leaveType = value!;
+          });
+        }),
+        _buildRadioButton("Congé sans solde", _leaveType, (value) {
+          setState(() {
+            _leaveType = value!;
+          });
+        }),
+        _buildRadioButton("Congé sabbatique", _leaveType, (value) {
+          setState(() {
+            _leaveType = value!;
+          });
+        }),
+        _buildRadioButton("Autre", _leaveType, (value) {
+          setState(() {
+            _leaveType = value!;
+          });
+        }),
       ],
     );
   }
@@ -180,42 +218,31 @@ class _CongeRequestPageState extends State<CongeRequestPage> {
   Widget _buildCompensationRadioButtons() {
     return Column(
       children: [
-        Text("Rémunération"),
-        Row(
-          children: [
-            _buildRadioButton("Congé payé", _compensation, (value) {
-              setState(() {
-                _compensation = value!;
-              });
-            }),
-            _buildRadioButton("Congé maladie", _compensation, (value) {
-              setState(() {
-                _compensation = value!;
-              });
-            }),
-          ],
-        ),
-        Row(
-          children: [
-            _buildRadioButton("Pas de rémunération", _compensation, (value) {
-              setState(() {
-                _compensation = value!;
-              });
-            }),
-          ],
-        ),
+        _buildRadioButton("Congé payé", _compensation, (value) {
+          setState(() {
+            _compensation = value!;
+          });
+        }),
+        _buildRadioButton("Congé maladie", _compensation, (value) {
+          setState(() {
+            _compensation = value!;
+          });
+        }),
+        _buildRadioButton("Pas de rémunération", _compensation, (value) {
+          setState(() {
+            _compensation = value!;
+          });
+        }),
       ],
     );
   }
 
   Widget _buildRadioButton(String value, String groupValue, ValueChanged<String?> onChanged) {
-    return Expanded(
-      child: RadioListTile<String>(
-        title: Text(value),
-        value: value,
-        groupValue: groupValue,
-        onChanged: onChanged,
-      ),
+    return RadioListTile<String>(
+      title: Text(value),
+      value: value,
+      groupValue: groupValue,
+      onChanged: onChanged,
     );
   }
 }

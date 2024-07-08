@@ -25,78 +25,129 @@ class _EditProfessionalInfoPageState extends State<EditProfessionalInfoPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              _buildTextField(_degreeController, "Diplôme", Icons.school),
-              SizedBox(height: 10),
-              _buildTextField(_positionController, "Poste", Icons.work),
-              SizedBox(height: 10),
-              _buildContractTypeSection(),
-              if (_contractType == "CDI") _buildDateField(_startDateController, "Date de début", Icons.calendar_today),
-              if (_contractType == "CDD") ...[
-                _buildDateField(_startDateController, "Date de début", Icons.calendar_today),
-                _buildDateField(_endDateController, "Date de fin", Icons.calendar_today),
-              ],
-              SizedBox(height: 10),
-              _buildTextField(_salaryController, "Salaire", Icons.attach_money),
-              SizedBox(height: 20),
-              _buildWorkTimeSection(),
-              SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  widget.onNext();
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Color.fromARGB(255, 174, 17, 6),
-                  foregroundColor: Colors.white,
-                  padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                ),
-                child: Icon(Icons.arrow_forward),
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            _buildCard(
+              title: "Diplôme",
+              child: _buildTextField(_degreeController, "Diplôme", Icons.school),
+            ),
+            _buildCard(
+              title: "Poste",
+              child: _buildTextField(_positionController, "Poste", Icons.work),
+            ),
+            _buildCard(
+              title: "Type de contrat",
+              child: _buildContractTypeSection(),
+            ),
+            if (_contractType == "CDI")
+              _buildCard(
+                title: "Date de début",
+                child: _buildDateField(_startDateController, "Date de début", Icons.calendar_today),
               ),
-              SizedBox(height: 10),
-              ElevatedButton(
-                onPressed: () {
-                  widget.onBack();
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.grey,
-                  foregroundColor: Colors.white,
-                  padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
+            if (_contractType == "CDD")
+              Column(
+                children: [
+                  _buildCard(
+                    title: "Date de début",
+                    child: _buildDateField(_startDateController, "Date de début", Icons.calendar_today),
                   ),
-                ),
-                child: Text(
-                  "Back",
-                  style: TextStyle(color: Colors.white),
+                  _buildCard(
+                    title: "Date de fin",
+                    child: _buildDateField(_endDateController, "Date de fin", Icons.calendar_today),
+                  ),
+                ],
+              ),
+            _buildCard(
+              title: "Salaire",
+              child: _buildTextField(_salaryController, "Salaire", Icons.attach_money),
+            ),
+            _buildCard(
+              title: "Horaire de travail",
+              child: _buildWorkTimeSection(),
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                widget.onNext();
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color.fromARGB(255, 174, 17, 6),
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30),
                 ),
               ),
-            ],
-          ),
+              child: const Icon(Icons.arrow_forward),
+            ),
+            const SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: () {
+                widget.onBack();
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.grey,
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30),
+                ),
+              ),
+              child: const Text(
+                "Retour",
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCard({required String title, required Widget child}) {
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15),
+      ),
+      elevation: 5,
+      margin: const EdgeInsets.only(bottom: 20),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              title,
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            child,
+          ],
         ),
       ),
     );
   }
 
   Widget _buildTextField(TextEditingController controller, String hintText, IconData icon) {
-    return TextField(
-      controller: controller,
-      decoration: InputDecoration(
-        hintText: hintText,
-        prefixIcon: Icon(icon),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        TextField(
+          controller: controller,
+          decoration: InputDecoration(
+            hintText: hintText,
+            prefixIcon: Icon(icon),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            filled: true,
+            fillColor: Colors.white,
+          ),
         ),
-        filled: true,
-        fillColor: Colors.white,
-      ),
+      ],
     );
   }
 
@@ -160,15 +211,11 @@ class _EditProfessionalInfoPageState extends State<EditProfessionalInfoPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          "Type de contrat",
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-        ),
         Row(
           children: [
             Expanded(
               child: RadioListTile(
-                title: Text("CDI"),
+                title: const Text("CDI"),
                 value: "CDI",
                 groupValue: _contractType,
                 onChanged: (String? newValue) {
@@ -180,7 +227,7 @@ class _EditProfessionalInfoPageState extends State<EditProfessionalInfoPage> {
             ),
             Expanded(
               child: RadioListTile(
-                title: Text("CDD"),
+                title: const Text("CDD"),
                 value: "CDD",
                 groupValue: _contractType,
                 onChanged: (String? newValue) {
@@ -200,10 +247,6 @@ class _EditProfessionalInfoPageState extends State<EditProfessionalInfoPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          "Horaire de travail",
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-        ),
         _buildTimeField(_workStartTimeController, "Horaire de début", Icons.schedule),
         _buildTimeField(_workEndTimeController, "Horaire de fin", Icons.schedule),
         _buildTextField(_breakTimeController, "Temps de pause", Icons.timer),

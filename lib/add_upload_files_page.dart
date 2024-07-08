@@ -18,6 +18,7 @@ class _UploadFilesPageState extends State<UploadFilesPage> {
     "CV (cv.pdf)": null,
     "RIB (rib.pdf)": null,
     "Contrat (contrat.pdf)": null,
+    "CIN (cin.pdf)": null, // Ajout du fichier CIN
   };
 
   @override
@@ -61,7 +62,7 @@ class _UploadFilesPageState extends State<UploadFilesPage> {
                   ),
                 ),
                 child: const Text(
-                  "Back",
+                  "Retour",
                   style: TextStyle(color: Colors.white),
                 ),
               ),

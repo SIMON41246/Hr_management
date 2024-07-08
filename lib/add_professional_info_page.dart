@@ -74,7 +74,7 @@ class _AddProfessionalInfoPageState extends State<AddProfessionalInfoPage> {
                   ),
                 ),
                 child: Text(
-                  "Back",
+                  "Retour",
                   style: TextStyle(color: Colors.white),
                 ),
               ),

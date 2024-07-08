@@ -18,6 +18,7 @@ class _UploadDownloadFilesPage extends State<UploadDownloadFilesPage> {
     "CV (cv.pdf)": null,
     "RIB (rib.pdf)": null,
     "Contrat (contrat.pdf)": null,
+    "CIN (cin.pdf)": null, // Ajout du fichier CIN
   };
 
   @override
@@ -61,7 +62,7 @@ class _UploadDownloadFilesPage extends State<UploadDownloadFilesPage> {
                   ),
                 ),
                 child: const Text(
-                  "Back",
+                  "Retour",
                   style: TextStyle(color: Colors.white),
                 ),
               ),
@@ -102,16 +103,7 @@ class _UploadDownloadFilesPage extends State<UploadDownloadFilesPage> {
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color.fromARGB(255, 174, 17, 6),
             ),
-            child: Row(
-              children: [
-                const Icon(Icons.upload_file, color: Colors.white),
-                const SizedBox(width: 5),
-                Text(
-                  _files[label] == null ? "Choose file" : "Change file",
-                  style: const TextStyle(color: Colors.white),
-                ),
-              ],
-            ),
+            child: const Icon(Icons.upload_file, color: Colors.white),
           ),
           const SizedBox(width: 10),
           ElevatedButton(

@@ -22,44 +22,83 @@ class _EditPersonalInfoPageState extends State<EditPersonalInfoPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              _buildTextField(_nameController, "Nom", Icons.person),
-              SizedBox(height: 10),
-              _buildTextField(_surnameController, "Prénom", Icons.person),
-              SizedBox(height: 10),
-              _buildTextField(_cinController, "CIN", Icons.credit_card),
-              SizedBox(height: 10),
-              _buildDateField(_dobController, "Date de naissance", Icons.calendar_today),
-              SizedBox(height: 10),
-              _buildTextField(_emailController, "Email", Icons.email),
-              SizedBox(height: 10),
-              _buildTextField(_phoneController, "Téléphone", Icons.phone),
-              SizedBox(height: 10),
-              _buildTextField(_cityController, "Ville", Icons.location_city),
-              SizedBox(height: 10),
-              _buildTextField(_ribController, "RIB", Icons.account_balance),
-              SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  widget.onNext();
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Color.fromARGB(255, 174, 17, 6),
-                  foregroundColor: Colors.white,
-                  padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
-                  ),
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            _buildCard(
+              title: "Nom",
+              child: _buildTextField(_nameController, "Nom", Icons.person),
+            ),
+            _buildCard(
+              title: "Prénom",
+              child: _buildTextField(_surnameController, "Prénom", Icons.person),
+            ),
+            _buildCard(
+              title: "CIN",
+              child: _buildTextField(_cinController, "CIN", Icons.credit_card),
+            ),
+            _buildCard(
+              title: "Date de naissance",
+              child: _buildDateField(_dobController, "Date de naissance", Icons.calendar_today),
+            ),
+            _buildCard(
+              title: "Email",
+              child: _buildTextField(_emailController, "Email", Icons.email),
+            ),
+            _buildCard(
+              title: "Téléphone",
+              child: _buildTextField(_phoneController, "Téléphone", Icons.phone),
+            ),
+            _buildCard(
+              title: "Ville",
+              child: _buildTextField(_cityController, "Ville", Icons.location_city),
+            ),
+            _buildCard(
+              title: "RIB",
+              child: _buildTextField(_ribController, "RIB", Icons.account_balance),
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                widget.onNext();
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color.fromARGB(255, 174, 17, 6),
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30),
                 ),
-                child: Icon(Icons.arrow_forward),
               ),
-            ],
-          ),
+              child: const Icon(Icons.arrow_forward),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCard({required String title, required Widget child}) {
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15),
+      ),
+      elevation: 5,
+      margin: const EdgeInsets.only(bottom: 20),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              title,
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            child,
+          ],
         ),
       ),
     );
