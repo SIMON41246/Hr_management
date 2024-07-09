@@ -115,6 +115,13 @@ class HomePage extends StatelessWidget {
               },
             ),
             ListTile(
+              leading: Icon(Icons.info,color: Colors.blue,),
+              title: Text('Liste des absences'),
+              onTap: () {
+                Navigator.pushNamed(context, '/liste_absence_employe');
+              },
+            ),
+            ListTile(
               leading: Icon(Icons.exit_to_app, color: Colors.red),
               title: Text('Log out', style: TextStyle(color: Colors.red)),
               onTap: () {

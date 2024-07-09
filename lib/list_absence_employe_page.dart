@@ -1,25 +1,25 @@
 import 'package:flutter/material.dart';
 
-class ListeCongeEmploye extends StatefulWidget {
+class ListeAbsenceEmploye extends StatefulWidget {
   @override
-  _ListeCongeEmployeState createState() => _ListeCongeEmployeState();
+  _ListeAbsenceEmployeState createState() => _ListeAbsenceEmployeState();
 }
 
-class _ListeCongeEmployeState extends State<ListeCongeEmploye> {
-  final List<Map<String, String>> conges = [
+class _ListeAbsenceEmployeState extends State<ListeAbsenceEmploye> {
+  final List<Map<String, String>> absences = [
     {
       'nom': 'Doe',
       'prenom': 'John',
-      'type': 'Maladie',
-      'du': '2024-06-01',
-      'jusqua': '2024-06-10',
+      'type': 'Retard',
+      'du': '2024-06-01 08:00',
+      'jusqua': '2024-06-01 09:00',
     },
     {
       'nom': 'Smith',
       'prenom': 'Jane',
-      'type': 'Vacances',
+      'type': 'Abandon de poste',
       'du': '2024-07-01',
-      'jusqua': '2024-07-15',
+      'jusqua': '2024-07-05',
     },
     // Ajoutez plus de données fictives ici pour les tests
   ];
@@ -28,15 +28,15 @@ class _ListeCongeEmployeState extends State<ListeCongeEmploye> {
 
   @override
   Widget build(BuildContext context) {
-    final filteredConges = conges.where((conge) {
-      final fullName = '${conge['nom']} ${conge['prenom']}';
+    final filteredAbsences = absences.where((absence) {
+      final fullName = '${absence['nom']} ${absence['prenom']}';
       return fullName.toLowerCase().contains(query.toLowerCase());
     }).toList();
 
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Liste des Congés',
+          'Liste des Absences',
           style: TextStyle(color: Colors.white),
         ),
         backgroundColor: Color.fromARGB(255, 174, 17, 6),
@@ -53,16 +53,16 @@ class _ListeCongeEmployeState extends State<ListeCongeEmploye> {
             onPressed: () {
               showSearch(
                 context: context,
-                delegate: CongeSearchDelegate(conges),
+                delegate: AbsenceSearchDelegate(absences),
               );
             },
           ),
         ],
       ),
       body: ListView.builder(
-        itemCount: filteredConges.length,
+        itemCount: filteredAbsences.length,
         itemBuilder: (context, index) {
-          final conge = filteredConges[index];
+          final absence = filteredAbsences[index];
           return Card(
             margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
             shape: RoundedRectangleBorder(
@@ -76,26 +76,26 @@ class _ListeCongeEmployeState extends State<ListeCongeEmploye> {
                 child: Icon(Icons.person, color: Colors.grey.shade700),
                 // Remplacez par l'image de l'employé
               ),
-              title: Text('${conge['nom']} ${conge['prenom']}'),
+              title: Text('${absence['nom']} ${absence['prenom']}'),
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Type: ${conge['type']}'),
-                  Text('Du: ${conge['du']}'),
-                  Text('Jusqu\'à: ${conge['jusqua']}'),
+                  Text('Type: ${absence['type']}'),
+                  Text('Du: ${absence['du']}'),
+                  Text('Jusqu\'à: ${absence['jusqua']}'),
                 ],
               ),
               trailing: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   IconButton(
-                    icon: const Icon(Icons.remove_red_eye,color: Colors.blue,),
+                    icon: Icon(Icons.remove_red_eye),
                     onPressed: () {
-                      // Naviguer vers la page d'information de congé de l'employé
+                      // Naviguer vers la page d'information d'absence de l'employé
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => CongeDetailsPage(conge),
+                          builder: (context) => AbsenceDetailsPage(absence),
                         ),
                       );
                     },
@@ -103,16 +103,16 @@ class _ListeCongeEmployeState extends State<ListeCongeEmploye> {
                   IconButton(
                     icon: Icon(Icons.delete),
                     onPressed: () {
-                      // Supprimer le congé de la liste
+                      // Supprimer l'absence de la liste
                       setState(() {
-                        conges.removeAt(index);
+                        absences.removeAt(index);
                       });
                     },
                   ),
                 ],
               ),
               onTap: () {
-                // Action lorsque l'on clique sur un congé
+                // Action lorsque l'on clique sur une absence
               },
             ),
           );
@@ -122,10 +122,10 @@ class _ListeCongeEmployeState extends State<ListeCongeEmploye> {
   }
 }
 
-class CongeSearchDelegate extends SearchDelegate {
-  final List<Map<String, String>> conges;
+class AbsenceSearchDelegate extends SearchDelegate {
+  final List<Map<String, String>> absences;
 
-  CongeSearchDelegate(this.conges);
+  AbsenceSearchDelegate(this.absences);
 
   @override
   ThemeData appBarTheme(BuildContext context) {
@@ -169,15 +169,15 @@ class CongeSearchDelegate extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
-    final results = conges.where((conge) {
-      final fullName = '${conge['nom']} ${conge['prenom']}';
+    final results = absences.where((absence) {
+      final fullName = '${absence['nom']} ${absence['prenom']}';
       return fullName.toLowerCase().contains(query.toLowerCase());
     }).toList();
 
     return ListView.builder(
       itemCount: results.length,
       itemBuilder: (context, index) {
-        final conge = results[index];
+        final absence = results[index];
         return Card(
           margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
           shape: RoundedRectangleBorder(
@@ -190,39 +190,39 @@ class CongeSearchDelegate extends SearchDelegate {
               backgroundColor: Colors.grey.shade200,
               child: Icon(Icons.person, color: Colors.grey.shade700),
             ),
-            title: Text('${conge['nom']} ${conge['prenom']}'),
+            title: Text('${absence['nom']} ${absence['prenom']}'),
             subtitle: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Type: ${conge['type']}'),
-                Text('Du: ${conge['du']}'),
-                Text('Jusqu\'à: ${conge['jusqua']}'),
+                Text('Type: ${absence['type']}'),
+                Text('Du: ${absence['du']}'),
+                Text('Jusqu\'à: ${absence['jusqua']}'),
               ],
             ),
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 IconButton(
-                  icon: Icon(Icons.remove_red_eye),
+                  icon: Icon(Icons.remove_red_eye,color: Colors.blue),
                   onPressed: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => CongeDetailsPage(conge),
+                        builder: (context) => AbsenceDetailsPage(absence),
                       ),
                     );
                   },
                 ),
                 IconButton(
-                  icon: Icon(Icons.delete,color: Colors.red),
+                  icon: Icon(Icons.delete,color: Colors.red,),
                   onPressed: () {
-                    //OnPress Delete congé Action
+                    //Delete data de l'absance liste boutton
                   },
                 ),
               ],
             ),
             onTap: () {
-              query = '${conge['nom']} ${conge['prenom']}';
+              query = '${absence['nom']} ${absence['prenom']}';
               showResults(context);
             },
           ),
@@ -233,27 +233,27 @@ class CongeSearchDelegate extends SearchDelegate {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    final suggestions = conges.where((conge) {
-      final fullName = '${conge['nom']} ${conge['prenom']}';
+    final suggestions = absences.where((absence) {
+      final fullName = '${absence['nom']} ${absence['prenom']}';
       return fullName.toLowerCase().contains(query.toLowerCase());
     }).toList();
 
     return ListView.builder(
       itemCount: suggestions.length,
       itemBuilder: (context, index) {
-        final conge = suggestions[index];
+        final absence = suggestions[index];
         return ListTile(
-          title: Text('${conge['nom']} ${conge['prenom']}'),
+          title: Text('${absence['nom']} ${absence['prenom']}'),
           subtitle: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Type: ${conge['type']}'),
-              Text('Du: ${conge['du']}'),
-              Text('Jusqu\'à: ${conge['jusqua']}'),
+              Text('Type: ${absence['type']}'),
+              Text('Du: ${absence['du']}'),
+              Text('Jusqu\'à: ${absence['jusqua']}'),
             ],
           ),
           onTap: () {
-            query = '${conge['nom']} ${conge['prenom']}';
+            query = '${absence['nom']} ${absence['prenom']}';
             showResults(context);
           },
         );
@@ -262,17 +262,17 @@ class CongeSearchDelegate extends SearchDelegate {
   }
 }
 
-class CongeDetailsPage extends StatelessWidget {
-  final Map<String, String> conge;
+class AbsenceDetailsPage extends StatelessWidget {
+  final Map<String, String> absence;
 
-  CongeDetailsPage(this.conge);
+  AbsenceDetailsPage(this.absence);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Détails du Congé',
+          'Détails de l\'Absence',
           style: TextStyle(color: Colors.white),
         ),
         backgroundColor: Color.fromARGB(255, 174, 17, 6),
@@ -282,11 +282,11 @@ class CongeDetailsPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Nom: ${conge['nom']}', style: TextStyle(fontSize: 18)),
-            Text('Prénom: ${conge['prenom']}', style: TextStyle(fontSize: 18)),
-            Text('Type de congé: ${conge['type']}', style: TextStyle(fontSize: 18)),
-            Text('Du: ${conge['du']}', style: TextStyle(fontSize: 18)),
-            Text('Jusqu\'à: ${conge['jusqua']}', style: TextStyle(fontSize: 18)),
+            Text('Nom: ${absence['nom']}', style: TextStyle(fontSize: 18)),
+            Text('Prénom: ${absence['prenom']}', style: TextStyle(fontSize: 18)),
+            Text('Type d\'absence: ${absence['type']}', style: TextStyle(fontSize: 18)),
+            Text('Du: ${absence['du']}', style: TextStyle(fontSize: 18)),
+            Text('Jusqu\'à: ${absence['jusqua']}', style: TextStyle(fontSize: 18)),
           ],
         ),
       ),
