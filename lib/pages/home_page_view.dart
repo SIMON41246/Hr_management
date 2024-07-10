@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+import '../data/repositories/user_controller.dart';
+
 class HomePage extends StatelessWidget {
   final List<Map<String, String>> employees = [
     {
@@ -21,6 +25,7 @@ class HomePage extends StatelessWidget {
     },
     // Ajoutez plus de données fictives ici pour les tests
   ];
+  final UserController userController = Get.put(UserController());
 
   void _showDeleteConfirmation(BuildContext context, int index) {
     showDialog(
@@ -86,7 +91,8 @@ class HomePage extends StatelessWidget {
             onPressed: () {
               showSearch(
                 context: context,
-                delegate: EmployeeSearchDelegate(employees, _showDeleteConfirmation),
+                delegate:
+                    EmployeeSearchDelegate(employees, _showDeleteConfirmation),
               );
             },
           ),
@@ -100,8 +106,10 @@ class HomePage extends StatelessWidget {
               decoration: BoxDecoration(
                 color: Color.fromARGB(255, 174, 17, 6),
               ),
-              accountName: Text('User Name', style: TextStyle(color: Colors.white)),
-              accountEmail: Text('user.email@example.com', style: TextStyle(color: Colors.white)),
+              accountName:
+                  Text('User Name', style: TextStyle(color: Colors.white)),
+              accountEmail: Text('user.email@example.com',
+                  style: TextStyle(color: Colors.white)),
               currentAccountPicture: CircleAvatar(
                 radius: 40.0,
                 // Remplacez par l'image de l'utilisateur
@@ -115,7 +123,10 @@ class HomePage extends StatelessWidget {
               },
             ),
             ListTile(
-              leading: Icon(Icons.info,color: Colors.blue,),
+              leading: Icon(
+                Icons.info,
+                color: Colors.blue,
+              ),
               title: Text('Liste des absences'),
               onTap: () {
                 Navigator.pushNamed(context, '/liste_absence_employe');
@@ -128,14 +139,14 @@ class HomePage extends StatelessWidget {
                 Navigator.pushReplacementNamed(context, '/login');
               },
             ),
-            
           ],
         ),
       ),
       body: ListView.builder(
-        itemCount: employees.length,
+        itemCount: userController.users.length,
         itemBuilder: (context, index) {
-          final employee = employees[index];
+          final user = userController.users[index];
+
           return Card(
             margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
             shape: RoundedRectangleBorder(
@@ -156,12 +167,12 @@ class HomePage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SizedBox(height: 10.0),
-                      Text('${employee['nom']} ${employee['prenom']}',
+                      Text('${user.nom} ${user.prenom}',
                           style: TextStyle(fontWeight: FontWeight.bold)),
-                      Text('Email: ${employee['email']}'),
-                      Text('Téléphone: ${employee['telephone']}'),
-                      Text('Ville: ${employee['ville']}'),
-                      Text('Poste: ${employee['poste']}'),
+                      Text('Email: ${user.email}'),
+                      Text('Téléphone: ${user.telephone}'),
+                      Text('Ville: ${user.ville}'),
+                      Text('Poste: ${user.poste}'),
                     ],
                   ),
                   onTap: () {
@@ -222,7 +233,8 @@ class AbsenceInfoPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Informations de congé', style: TextStyle(color: Colors.white)),
+        title: Text('Informations de congé',
+            style: TextStyle(color: Colors.white)),
         backgroundColor: Color.fromARGB(255, 174, 17, 6),
         iconTheme: IconThemeData(color: Colors.white),
       ),
@@ -355,8 +367,9 @@ class EmployeeSearchDelegate extends SearchDelegate {
 
   Widget _buildEmployeeList() {
     final filteredEmployees = employees
-        .where((employee) =>
-            '${employee['nom']} ${employee['prenom']}'.toLowerCase().contains(query.toLowerCase()))
+        .where((employee) => '${employee['nom']} ${employee['prenom']}'
+            .toLowerCase()
+            .contains(query.toLowerCase()))
         .toList();
 
     return ListView.builder(

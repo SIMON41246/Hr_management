@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_app_rh/home_page_view.dart';
 import 'package:validators/validators.dart';
+
+import 'home_page_view.dart';
 
 class LoginPage extends StatefulWidget {
   @override

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_app_rh/edit_personal_info_page.dart';
-import 'package:mobile_app_rh/edit_professional_info_page.dart';
-import 'package:mobile_app_rh/edit_upload_download_files_page.dart';
-import 'package:mobile_app_rh/home_page_view.dart';
+
+import 'edit_personal_info_page.dart';
+import 'edit_professional_info_page.dart';
+import 'edit_upload_download_files_page.dart';
+import 'home_page_view.dart';
+
 
 class EditEmployeeWizard extends StatefulWidget {
   @override
