@@ -65,7 +65,7 @@ class UserRepository {
   static Future<String> saveImage(
       {required String imgName, required String imgPath}) async {
     final saveImg = await _firebaseStorage
-        .ref("USERS")
+        .ref()
         .child(imgName)
         .putFile(File(imgPath));
     final imgUrl = await saveImg.ref.getDownloadURL();
@@ -75,7 +75,7 @@ class UserRepository {
   static Future<String> saveRib(
       {required String ribName, required String ribPath}) async {
     final saveImg = await _firebaseStorage
-        .ref("USERS")
+        .ref()
         .child(ribName)
         .putFile(File(ribPath));
     final imgUrl = await saveImg.ref.getDownloadURL();
@@ -85,7 +85,7 @@ class UserRepository {
   static Future<String> saveContrat(
       {required String contratName, required String contratPath}) async {
     final saveImg = await _firebaseStorage
-        .ref("USERS")
+        .ref()
         .child(contratName)
         .putFile(File(contratPath));
     final imgUrl = await saveImg.ref.getDownloadURL();
@@ -95,7 +95,7 @@ class UserRepository {
   static Future<String> saveCV(
       {required String cvName, required String cvPath}) async {
     final saveImg =
-        await _firebaseStorage.ref("USERS").child(cvName).putFile(File(cvPath));
+        await _firebaseStorage.ref().child(cvName).putFile(File(cvPath));
     final imgUrl = await saveImg.ref.getDownloadURL();
     return imgUrl;
   }
@@ -103,7 +103,7 @@ class UserRepository {
   static Future<String> saveCin(
       {required String cinName, required String cinPath}) async {
     final saveImg = await _firebaseStorage
-        .ref("USERS")
+        .ref()
         .child(cinName)
         .putFile(File(cinPath));
     final imgUrl = await saveImg.ref.getDownloadURL();
@@ -113,7 +113,7 @@ class UserRepository {
   static Future<String> saveDiplome(
       {required String diplomName, required String diplomePath}) async {
     final saveImg = await _firebaseStorage
-        .ref("USERS")
+        .ref()
         .child(diplomName)
         .putFile(File(diplomePath));
     final imgUrl = await saveImg.ref.getDownloadURL();

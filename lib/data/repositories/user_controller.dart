@@ -95,17 +95,25 @@ class UserController extends GetxController {
       //CustomLoading.start();
 
       final imgUrl = await UserRepository.saveImage(
-          imgName: uuid.v1(), imgPath: image.value);
+          imgName: "imageFile", imgPath: image.value);
       final ribUrl =
-          await UserRepository.saveRib(ribName: uuid.v1(), ribPath: rib.value);
+          await UserRepository.saveRib(ribName: "ribFile", ribPath: rib.value);
       final contratUrl = await UserRepository.saveContrat(
-          contratName: uuid.v1(), contratPath: contrat.value);
+          contratName: "contratFile", contratPath: contrat.value);
       final diplomeUrl = await UserRepository.saveDiplome(
-          diplomName: uuid.v1(), diplomePath: diplome.value);
+          diplomName: "diplomeFile", diplomePath: diplome.value);
       final cinUrl =
-          await UserRepository.saveCin(cinName: uuid.v1(), cinPath: cin.value);
+          await UserRepository.saveCin(cinName: "cinFile", cinPath: cin.value);
       final cvUrl =
-          await UserRepository.saveCV(cvName: uuid.v1(), cvPath: cv.value);
+          await UserRepository.saveCV(cvName: "cvFile", cvPath: cv.value);
+
+      print(imgUrl);
+      print(ribUrl);
+      print(contratUrl);
+      print(diplomeUrl);
+      print(cinUrl);
+      print(cvUrl);
+
       //isLoading(true);
       await _firestoreService.addUser(User(
         id: uuid.v1(),
